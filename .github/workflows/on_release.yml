@@ -131,39 +131,39 @@ jobs:
             target: client
             version_suffix: ""
           - name: client-alpine
-            repository: ${{ github.repository_owner }}/opal-client
+            repository: ${{ github.repository_owner == 'permitio' && 'docker.io' || 'ghcr.io' }}/${{ github.repository_owner }}/opal-client
             target: client-alpine
             version_suffix: "-alpine"
           - name: client-standalone
-            repository: ${{ github.repository_owner }}/opal-client-standalone
+            repository: ${{ github.repository_owner == 'permitio' && 'docker.io' || 'ghcr.io' }}/${{ github.repository_owner }}/opal-client-standalone
             target: client-standalone
             version_suffix: ""
           - name: client-standalone-alpine
-            repository: ${{ github.repository_owner }}/opal-client-standalone
+            repository: ${{ github.repository_owner == 'permitio' && 'docker.io' || 'ghcr.io' }}/${{ github.repository_owner }}/opal-client-standalone
             target: client-standalone-alpine
             version_suffix: "-alpine"
           - name: client-cedar
-            repository: ${{ github.repository_owner }}/opal-client-cedar
+            repository: ${{ github.repository_owner == 'permitio' && 'docker.io' || 'ghcr.io' }}/${{ github.repository_owner }}/opal-client-cedar
             target: client-cedar
             version_suffix: ""
           - name: client-cedar-alpine
-            repository: ${{ github.repository_owner }}/opal-client-cedar
+            repository: ${{ github.repository_owner == 'permitio' && 'docker.io' || 'ghcr.io' }}/${{ github.repository_owner }}/opal-client-cedar
             target: client-cedar-alpine
             version_suffix: "-alpine"
           - name: client-eopa
-            repository: ${{ github.repository_owner }}/opal-client-eopa
+            repository: ${{ github.repository_owner == 'permitio' && 'docker.io' || 'ghcr.io' }}/${{ github.repository_owner }}/opal-client-eopa
             target: client-eopa
             version_suffix: ""
           - name: client-eopa-alpine
-            repository: ${{ github.repository_owner }}/opal-client-eopa
+            repository: ${{ github.repository_owner == 'permitio' && 'docker.io' || 'ghcr.io' }}/${{ github.repository_owner }}/opal-client-eopa
             target: client-eopa-alpine
             version_suffix: "-alpine"
           - name: server
-            repository: ${{ github.repository_owner }}/opal-server
+            repository: ${{ github.repository_owner == 'permitio' && 'docker.io' || 'ghcr.io' }}/${{ github.repository_owner }}/opal-server
             target: server
             version_suffix: ""
           - name: server-alpine
-            repository: ${{ github.repository_owner }}/opal-server
+            repository: ${{ github.repository_owner == 'permitio' && 'docker.io' || 'ghcr.io' }}/${{ github.repository_owner }}/opal-server
             target: server-alpine
             version_suffix: "-alpine"
     steps:
