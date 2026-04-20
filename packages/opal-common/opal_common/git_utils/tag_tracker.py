@@ -71,12 +71,12 @@ class TagTracker(BranchTracker):
 
     @property
     def latest_commit(self) -> Commit:
-        """the commit of the tracked tag."""
+        """The commit of the tracked tag."""
         return self.tracked_tag.commit
 
     @property
     def tracked_tag(self) -> Tag:
-        """returns the tracked tag reference (of type git.Reference) or throws
+        """Returns the tracked tag reference (of type git.Reference) or throws
         if such tag does not exist on the repo."""
         try:
             return getattr(self._repo.tags, self._tag_name)

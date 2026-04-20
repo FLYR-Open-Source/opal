@@ -82,9 +82,7 @@ def pygit2_repo(tmp_path):
     # Create an initial commit
     sig = pygit2.Signature("Test", "test@test.com")
     tree = repo.TreeBuilder().write()
-    commit_oid = repo.create_commit(
-        "refs/heads/master", sig, sig, "init", tree, []
-    )
+    commit_oid = repo.create_commit("refs/heads/master", sig, sig, "init", tree, [])
     # Create a lightweight tag
     repo.create_reference("refs/tags/v1.0", commit_oid)
 
@@ -200,9 +198,7 @@ class TestShouldFetchWithTags:
         fetcher = self._make_fetcher(source)
         mock_repo = MagicMock()
 
-        with patch.object(
-            RepoInterface, "has_tag", return_value=False
-        ):
+        with patch.object(RepoInterface, "has_tag", return_value=False):
             result = await fetcher._should_fetch(mock_repo)
             assert result is True
 
@@ -213,9 +209,7 @@ class TestShouldFetchWithTags:
         fetcher = self._make_fetcher(source)
         mock_repo = MagicMock()
 
-        with patch.object(
-            RepoInterface, "has_tag", return_value=True
-        ):
+        with patch.object(RepoInterface, "has_tag", return_value=True):
             result = await fetcher._should_fetch(mock_repo)
             assert result is True
 
@@ -234,9 +228,7 @@ class TestShouldFetchWithTags:
         fetcher = self._make_fetcher(source)
         mock_repo = MagicMock()
 
-        with patch.object(
-            RepoInterface, "has_remote_branch", return_value=False
-        ):
+        with patch.object(RepoInterface, "has_remote_branch", return_value=False):
             result = await fetcher._should_fetch(mock_repo)
             assert result is True
 
@@ -246,9 +238,7 @@ class TestShouldFetchWithTags:
         fetcher = self._make_fetcher(source)
         mock_repo = MagicMock()
 
-        with patch.object(
-            RepoInterface, "has_remote_branch", return_value=True
-        ):
+        with patch.object(RepoInterface, "has_remote_branch", return_value=True):
             result = await fetcher._should_fetch(mock_repo)
             assert result is False
 
@@ -280,9 +270,7 @@ class TestNotifyOnChangesWithTags:
 
         with patch.object(
             RepoInterface, "get_tag_commit_hash", return_value=fake_hash
-        ), patch.object(
-            RepoInterface, "get_local_branch", return_value=None
-        ):
+        ), patch.object(RepoInterface, "get_local_branch", return_value=None):
             mock_repo.create_reference.return_value = MagicMock()
             await fetcher._notify_on_changes(mock_repo)
 
@@ -294,9 +282,7 @@ class TestNotifyOnChangesWithTags:
         fetcher = self._make_fetcher(source)
         mock_repo = MagicMock()
 
-        with patch.object(
-            RepoInterface, "get_tag_commit_hash", return_value=None
-        ):
+        with patch.object(RepoInterface, "get_tag_commit_hash", return_value=None):
             await fetcher._notify_on_changes(mock_repo)
 
         fetcher.callbacks.on_update.assert_not_awaited()

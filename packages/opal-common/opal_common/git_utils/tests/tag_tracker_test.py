@@ -18,8 +18,8 @@ from pathlib import Path
 
 from git import Repo
 from git.objects.commit import Commit
-from opal_common.git_utils.tag_tracker import TagTracker
 from opal_common.git_utils.exceptions import GitFailed
+from opal_common.git_utils.tag_tracker import TagTracker
 
 
 def test_pull_with_no_changes(local_repo_clone: Repo):
