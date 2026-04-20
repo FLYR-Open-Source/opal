@@ -127,7 +127,7 @@ jobs:
       matrix:
         include:
           - name: client
-            repository: ${{ github.repository_owner }}/opal-client
+            repository: ${{ github.repository_owner == 'permitio' && 'docker.io' || 'ghcr.io' }}/${{ github.repository_owner }}/opal-client
             target: client
             version_suffix: ""
           - name: client-alpine
