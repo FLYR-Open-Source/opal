@@ -120,48 +120,49 @@ jobs:
       id-token: write
       contents: write
       pull-requests: write
+      packages: write
     strategy:
       fail-fast: false
       matrix:
         include:
           - name: client
-            repository: permitio/opal-client
+            repository: ${{ github.repository_owner }}/opal-client
             target: client
             version_suffix: ""
           - name: client-alpine
-            repository: permitio/opal-client
+            repository: ${{ github.repository_owner }}/opal-client
             target: client-alpine
             version_suffix: "-alpine"
           - name: client-standalone
-            repository: permitio/opal-client-standalone
+            repository: ${{ github.repository_owner }}/opal-client-standalone
             target: client-standalone
             version_suffix: ""
           - name: client-standalone-alpine
-            repository: permitio/opal-client-standalone
+            repository: ${{ github.repository_owner }}/opal-client-standalone
             target: client-standalone-alpine
             version_suffix: "-alpine"
           - name: client-cedar
-            repository: permitio/opal-client-cedar
+            repository: ${{ github.repository_owner }}/opal-client-cedar
             target: client-cedar
             version_suffix: ""
           - name: client-cedar-alpine
-            repository: permitio/opal-client-cedar
+            repository: ${{ github.repository_owner }}/opal-client-cedar
             target: client-cedar-alpine
             version_suffix: "-alpine"
           - name: client-eopa
-            repository: permitio/opal-client-eopa
+            repository: ${{ github.repository_owner }}/opal-client-eopa
             target: client-eopa
             version_suffix: ""
           - name: client-eopa-alpine
-            repository: permitio/opal-client-eopa
+            repository: ${{ github.repository_owner }}/opal-client-eopa
             target: client-eopa-alpine
             version_suffix: "-alpine"
           - name: server
-            repository: permitio/opal-server
+            repository: ${{ github.repository_owner }}/opal-server
             target: server
             version_suffix: ""
           - name: server-alpine
-            repository: permitio/opal-server
+            repository: ${{ github.repository_owner }}/opal-server
             target: server-alpine
             version_suffix: "-alpine"
     steps:
@@ -178,9 +179,18 @@ jobs:
 
       - name: Login to DockerHub
         uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        if: ${{ github.repository_owner != 'permitio' }}
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        if: ${{ github.repository_owner != 'permitio' }}
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Prepare tags
         id: tags
@@ -240,6 +250,7 @@ jobs:
     needs:
       - build_and_test
     runs-on: ubuntu-latest
+    if: ${{ github.repository_owner == 'permitio' }}
     permissions:
       id-token: write
       contents: write
