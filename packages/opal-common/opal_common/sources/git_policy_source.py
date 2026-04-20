@@ -52,6 +52,9 @@ class GitPolicySource(BasePolicySource):
             clone_timeout=request_timeout,
         )
 
+        branch_name = branch_name or None
+        tag_name = tag_name or None
+
         if branch_name is None and tag_name is None:
             logger.exception("Must provide either branch_name or tag_name")
             raise ValueError("Must provide either branch_name or tag_name")
