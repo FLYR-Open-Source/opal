@@ -296,7 +296,7 @@ class TestNotifyOnChangesWithTags:
         new_hash = "new456"
 
         mock_local_branch = MagicMock()
-        mock_local_branch.target.hex = old_hash
+        mock_local_branch.target.__str__ = lambda self: old_hash
 
         with patch.object(
             RepoInterface, "get_tag_commit_hash", return_value=new_hash
