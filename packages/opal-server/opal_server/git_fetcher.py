@@ -64,9 +64,9 @@ class RepoInterface:
             else:
                 raise RuntimeError("Base branch was not found on remote")
             logger.debug(
-                f"Created local branch '{branch_name}', pointing to: {commit.hex}"
+                f"Created local branch '{branch_name}', pointing to: {str(commit.id)}"
             )
-            return repo.create_reference(f"refs/heads/{branch_name}", commit.hex)
+            return repo.create_reference(f"refs/heads/{branch_name}", str(commit.id))
         else:
             logger.debug(
                 f"No need to create local branch '{branch_name}': already exists!"
@@ -92,7 +92,7 @@ class RepoInterface:
     def get_commit_hash(repo: Repository, branch: str, remote: str) -> Optional[str]:
         try:
             (commit, _) = repo.resolve_refish(f"{remote}/{branch}")
-            return commit.hex
+            return str(commit.id)
         except (pygit2.GitError, KeyError):
             return None
 
@@ -104,7 +104,7 @@ class RepoInterface:
             # If the tag is annotated, dereference to the commit
             if commit.type == pygit2.GIT_OBJECT_TAG:
                 commit = commit.peel(pygit2.Commit)
-            return commit.hex
+            return str(commit.id)
         except (KeyError, pygit2.GitError):
             return None
 
@@ -305,7 +305,9 @@ class GitPolicyFetcher(PolicyFetcher):
                 )
                 return True  # missing tag
         else:
-            if not RepoInterface.has_remote_branch(repo, self._source.branch, self._remote):
+            if not RepoInterface.has_remote_branch(
+                repo, self._source.branch, self._remote
+            ):
                 logger.info(
                     "Target branch was not found in local clone, re-fetching the remote"
                 )
@@ -341,9 +343,7 @@ class GitPolicyFetcher(PolicyFetcher):
     async def _notify_on_changes(self, repo: Repository):
         # Get the latest commit hash of the target ref (branch or tag)
         if self._is_tag:
-            new_revision = RepoInterface.get_tag_commit_hash(
-                repo, self._source.tag
-            )
+            new_revision = RepoInterface.get_tag_commit_hash(repo, self._source.tag)
             if new_revision is None:
                 logger.error(f"Did not find target tag: {self._source.tag}")
                 return
@@ -352,7 +352,9 @@ class GitPolicyFetcher(PolicyFetcher):
                 repo, self._source.branch, self._remote
             )
             if new_revision is None:
-                logger.error(f"Did not find target branch on remote: {self._source.branch}")
+                logger.error(
+                    f"Did not find target branch on remote: {self._source.branch}"
+                )
                 return
 
         # Get the previous commit hash of the target ref
@@ -362,14 +364,16 @@ class GitPolicyFetcher(PolicyFetcher):
             old_revision = None
             if self._is_tag:
                 # For tags, create a local branch pointing at the tag's commit
-                ref = repo.create_reference(f"refs/heads/{self.local_branch_name}", new_revision)
+                ref = repo.create_reference(
+                    f"refs/heads/{self.local_branch_name}", new_revision
+                )
                 local_branch = ref
             else:
                 local_branch = RepoInterface.create_local_branch_ref(
                     repo, self.local_branch_name, self._remote, self._source.branch
                 )
         else:
-            old_revision = local_branch.target.hex
+            old_revision = str(local_branch.target)
 
         await self.callbacks.on_update(old_revision, new_revision)
 
@@ -379,9 +383,7 @@ class GitPolicyFetcher(PolicyFetcher):
     def _get_current_head(self) -> str:
         repo = self._get_repo()
         if self._is_tag:
-            head_commit_hash = RepoInterface.get_tag_commit_hash(
-                repo, self._source.tag
-            )
+            head_commit_hash = RepoInterface.get_tag_commit_hash(repo, self._source.tag)
         else:
             head_commit_hash = RepoInterface.get_commit_hash(
                 repo, self._source.branch, self._remote
