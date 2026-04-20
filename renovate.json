@@ -19,6 +19,12 @@
       "enabled": true
     }
   ],
+  "pip_requirements": {
+    "managerFilePatterns": [
+      "/(^|/)[\\w-]*requirements([-._]\\w+)?\\.(txt|pip)$/",
+      "/(^|/)[\\w-]*requires([-._]\\w+)?\\.(txt|pip)$/"
+    ]
+  },
   "labels": [
     "dependencies"
   ],
