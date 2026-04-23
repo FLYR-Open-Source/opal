@@ -75,6 +75,8 @@ def setup_watcher_task(
         branch_name, opal_server_config.POLICY_REPO_MAIN_BRANCH
     )
     tag_name = load_conf_if_none(tag_name, opal_server_config.POLICY_REPO_TAG)
+    branch_name = branch_name or None
+    tag_name = tag_name or None
     if branch_name is None and tag_name is None:
         logger.info("No branch or tag specified, falling back to using branch 'master'")
         branch_name = "master"
