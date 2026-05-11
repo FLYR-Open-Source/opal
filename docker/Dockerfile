@@ -1,7 +1,7 @@
 # BUILD STAGE ---------------------------------------
 # split this stage to save time and reduce image size
 # ---------------------------------------------------
-FROM python:3.12-bookworm AS build-stage
+FROM python:3.14-bookworm AS build-stage
 # from now on, work in the /app directory
 WORKDIR /app/
 # Layer dependency install (for caching)
@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir -r ./
 
 # COMMON IMAGE --------------------------------------
 # ---------------------------------------------------
-FROM python:3.12-slim-bookworm AS common
+FROM python:3.14-slim-bookworm AS common
 
 # copy libraries from build stage (This won't copy redundant libraries we used in build-stage)
 # also remove the default python site-packages that has older versions of packages that won't be overridden
@@ -244,7 +244,7 @@ USER opal
 # ===================== ALPINE VARIANTS =====================
 # BUILD STAGE (ALPINE) --------------------------------------
 # -----------------------------------------------------------
-FROM python:3.12-alpine AS build-stage-alpine
+FROM python:3.14-alpine AS build-stage-alpine
 WORKDIR /app/
 RUN apk add --no-cache \
   bash \
@@ -270,7 +270,7 @@ RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir -r ./
 
 # COMMON IMAGE (ALPINE) -------------------------------------
 # -----------------------------------------------------------
-FROM python:3.12-alpine AS common-alpine
+FROM python:3.14-alpine AS common-alpine
 RUN rm -r /usr/local/lib/python3.12/site-packages || true
 COPY --from=build-stage-alpine /usr/local /usr/local
 RUN adduser -D -h /opal -s /bin/bash opal && apk add --no-cache bash netcat-openbsd jq wget
