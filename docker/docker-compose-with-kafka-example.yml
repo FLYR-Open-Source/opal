@@ -19,7 +19,7 @@ services:
   # The format of the broadcaster URI string (the one we pass to opal server as `OPAL_BROADCAST_URI`) is specified here:
   # https://github.com/encode/broadcaster#available-backends
   kafka_broadcast_channel:
-    image: confluentinc/cp-kafka:6.2.0
+    image: confluentinc/cp-kafka:6.2.15
     hostname: kafka
     ports:
       # To learn about configuring Kafka for access across networks see
