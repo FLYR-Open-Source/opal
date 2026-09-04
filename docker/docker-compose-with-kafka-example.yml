@@ -3,7 +3,7 @@ name: opal-kafka-example
 services:
   # Based on: https://developer.confluent.io/quickstart/kafka-docker/
   zookeeper:
-    image: confluentinc/cp-zookeeper:6.2.0
+    image: confluentinc/cp-zookeeper:6.2.15
     hostname: zookeeper
     ports:
       - 2181:2181
